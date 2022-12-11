@@ -773,6 +773,9 @@ function opacitizeBlocksV2(opacity) {
   }
 }
 
+/*/Get ready for theming checks to prevent errors./*/
+window.theming = false;
+
 function setColourTheme(x, y, z) {
   var elems = Blockly.getMainWorkspace().getAllBlocks();
   for (let i = 0; i < elems.length; i++) {
@@ -867,8 +870,8 @@ menu.innerHTML = `
   <button class="tablinks" onclick="openTab(event, 'XML'); prepXML();">XML</button>
   <button class="tablinks" onclick="openTab(event, 'Blocks'); blocksTab();">Blocks</button>
   <button class="tablinks" onclick="openTab(event, 'Options')">Options</button>
-  <button class="tablinks" onclick="openTab(event, 'Themes')">Themes</button>
   <button class="tablinks" onclick="openTab(event, 'Store')">Store</button>
+  <button class="tablinks" onclick="openTab(event, 'Snippets');">Snippets</button>
   <button class="tablinks" onclick="openTab(event, 'Vars'); varsTab();">Variables</button>
   <button class="tablinks" onclick="openTab(event, 'About')">About</button>
 </div>
@@ -883,10 +886,6 @@ menu.innerHTML = `
   <div id="blocksList"></div>
 </div>
 
-<div id="Themes" class="tabcontent">
-  <h3>Themes (Coming Soon)</h3>
-</div>
-
 <div id="Snippets" class="tabcontent">
   <h3>Snippets</h3>
   <button class="button-7" onclick="document.getElementsByClassName('injectionDiv')[0].requestFullscreen()" title="JJScript">Fullscreen Editor</button>
@@ -898,6 +897,8 @@ menu.innerHTML = `
   <input type="range" min="0.02" max="10" step="0.01" value="0.5" style="width:100%" onchange="forceZoom(this.value)"/>
   <p>Block Opacity</p>
   <input type="range" min="0.0" max="1.0" step="0.01" id="blockOpacity" value="1.0" style="width:100%" onchange="opacitizeBlocksV2(this.value)"/>
+  <p>Snap Radius</p>
+  <input type="range" min="1" max="150" step="1" value="6" style="width:100%" onchange="ScratchBlocks.SNAP_RADIUS=(this.value*4)"/>
   <input type="checkbox" name="rtl" onchange="Blockly.getMainWorkspace().RTL = this.checked;Blockly.getMainWorkspace().options.RTL = this.checked;">
   <label for="rtl">Flipped Blocks</label><br>
   <input type="checkbox" name="readonly" onchange="Blockly.getMainWorkspace().options.readOnly = this.checked;">
@@ -907,7 +908,7 @@ menu.innerHTML = `
   <input type="checkbox" name="vert" onchange="Blockly.getMainWorkspace().getToolbox().horizontalLayout_ = this.checked;">
   <label for="vert">Horizontal Toolbox</label><br><br>
   <details>
-    <summary>> Developer Theming</summary>
+    <summary>Theming</summary>
     <p>Custom Block Theming<button class="button-7" onclick="window.theming = true; this.remove(); setColourTheme(th1 ?? '#000000', th2 ?? '#000000', th3 ?? '#000000')">Enable Theming</button></p>
     <br>
     <input type="color" value="#9966ff" name="th1" onchange="window.th1=this.value; if (theming) { setColourTheme(th1, th2, th3); }"/><label for="th1">Color 1</label>
