@@ -898,7 +898,7 @@ menu.innerHTML = `
   <p>Block Opacity</p>
   <input type="range" min="0.0" max="1.0" step="0.01" id="blockOpacity" value="1.0" style="width:100%" onchange="opacitizeBlocksV2(this.value)"/>
   <p>Snap Radius</p>
-  <input type="range" min="1" max="150" step="1" value="6" style="width:100%" onchange="ScratchBlocks.SNAP_RADIUS=(this.value*4)"/>
+  <input type="range" min="1" max="150" step="0.2" value="6" style="width:100%" onchange="ScratchBlocks.SNAP_RADIUS=(this.value*4)"/>
   <input type="checkbox" name="rtl" onchange="Blockly.getMainWorkspace().RTL = this.checked;Blockly.getMainWorkspace().options.RTL = this.checked;">
   <label for="rtl">Flipped Blocks</label><br>
   <input type="checkbox" name="readonly" onchange="Blockly.getMainWorkspace().options.readOnly = this.checked;">
