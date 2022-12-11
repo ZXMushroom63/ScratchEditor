@@ -867,6 +867,7 @@ menu.innerHTML = `
   <button class="tablinks" onclick="openTab(event, 'XML'); prepXML();">XML</button>
   <button class="tablinks" onclick="openTab(event, 'Blocks'); blocksTab();">Blocks</button>
   <button class="tablinks" onclick="openTab(event, 'Options')">Options</button>
+  <button class="tablinks" onclick="openTab(event, 'Themes')">Themes</button>
   <button class="tablinks" onclick="openTab(event, 'Store')">Store</button>
   <button class="tablinks" onclick="openTab(event, 'Vars'); varsTab();">Variables</button>
   <button class="tablinks" onclick="openTab(event, 'About')">About</button>
@@ -880,6 +881,10 @@ menu.innerHTML = `
   <h3>Blocks</h3>
   <button class="button-7" onclick="clearOrphanBlocks(Blockly.getMainWorkspace())" title="Clean Up Blocks">🧹</button>
   <div id="blocksList"></div>
+</div>
+
+<div id="Themes" class="tabcontent">
+  <h3>Themes (Coming Soon)</h3>
 </div>
 
 <div id="Snippets" class="tabcontent">
@@ -901,11 +906,14 @@ menu.innerHTML = `
   <label for="comments">Comments</label><br>
   <input type="checkbox" name="vert" onchange="Blockly.getMainWorkspace().getToolbox().horizontalLayout_ = this.checked;">
   <label for="vert">Horizontal Toolbox</label><br><br>
-  <p>Custom Block Theming<button class="button-7" onclick="window.theming = true; this.remove(); setColourTheme(th1 ?? '#000000', th2 ?? '#000000', th3 ?? '#000000')">Enable Theming</button></p>
-  <br>
-  <input type="color" value="#9966ff" name="th1" onchange="window.th1=this.value; if (theming) { setColourTheme(th1, th2, th3); }"/><label for="th1">Color 1</label>
-  <input type="color" value="#8a5ce6" name="th2" onchange="window.th2=this.value; if (theming) { setColourTheme(th1, th2, th3); }"/><label for="th2">Color 2</label>
-  <input type="color" name="th3" onchange="window.th3=this.value; if (theming) { setColourTheme(th1, th2, th3); }"/><label for="th3">Color 3</label>
+  <details>
+    <summary>Developer Theming</summary>
+    <p>Custom Block Theming<button class="button-7" onclick="window.theming = true; this.remove(); setColourTheme(th1 ?? '#000000', th2 ?? '#000000', th3 ?? '#000000')">Enable Theming</button></p>
+    <br>
+    <input type="color" value="#9966ff" name="th1" onchange="window.th1=this.value; if (theming) { setColourTheme(th1, th2, th3); }"/><label for="th1">Color 1</label>
+    <input type="color" value="#8a5ce6" name="th2" onchange="window.th2=this.value; if (theming) { setColourTheme(th1, th2, th3); }"/><label for="th2">Color 2</label>
+    <input type="color" name="th3" onchange="window.th3=this.value; if (theming) { setColourTheme(th1, th2, th3); }"/><label for="th3">Color 3</label>
+  </details>
   <br>
   <br>
   <br>
