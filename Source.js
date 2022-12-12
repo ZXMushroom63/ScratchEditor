@@ -906,7 +906,7 @@ menu.innerHTML = `
   <input type="checkbox" name="vert" onchange="Blockly.getMainWorkspace().getToolbox().horizontalLayout_ = this.checked;">
   <label for="vert">Horizontal Toolbox</label><br><br>
   <details>
-    <summary>Theming</summary>
+    <summary>> Theming</summary>
     <p>Custom Block Theming<button class="button-7" onclick="window.theming = true; this.remove(); setColourTheme(th1 ?? '#000000', th2 ?? '#000000', th3 ?? '#000000')">Enable Theming</button></p>
     <br>
     <input type="color" value="#9966ff" name="th1" onchange="window.th1=this.value; if (theming) { setColourTheme(th1, th2, th3); }"/><label for="th1">Color 1</label>
