@@ -237,10 +237,10 @@ function dragElement(elmnt) {
     e = e || window.event;
     e.preventDefault();
     /*/ calculate the new cursor position:/*/
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
+    pos1 = pos3 - (e.clientX || e.touches[0].clientX);
+    pos2 = pos4 - (e.clientY || e.touches[0].clientY);
+    pos3 = (e.clientX || e.touches[0].clientX);
+    pos4 = (e.clientY || e.touches[0].clientY);
     /*/ set the element's new position:/*/
     elmnt.style.top = elmnt.offsetTop - pos2 + "px";
     elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
