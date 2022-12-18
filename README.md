@@ -2,9 +2,9 @@
 Fully javascript coded tool to hack scratch. Run as a bookmarklet or whatnot.
 So far can:
 <br>
-Access full blockly
+Add custom blocks!!!!!!!!!!!!!!!!
 <br>
-Add custom blocks
+Access full blockly
 <br>
 Modify workspace XML live
 <br>
