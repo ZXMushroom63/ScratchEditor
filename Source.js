@@ -192,7 +192,7 @@ const injectWorkspace = (ScratchBlocks) => {
       id: "sa-blocks",
       xml:
         "<category" +
-        ` name="${escapeHTML("Developer")}"` +
+        ` name="${escapeHTML("SK2 Blocks")}"` +
         ' id="sa-blocks"' +
         ' colour="#32a852"' +
         ' secondaryColour="#000000"' +
@@ -334,6 +334,55 @@ addBlock("rStore", {
   displayName: "rStore",
   callback: () => {
     window.alert("Made by Robert Pirtea for rStore.");
+  },
+});
+addBlock("Show HTML Box", {
+  args: [],
+  displayName: "Show HTML Box",
+  callback: () => {
+    document.getElementById("html_box").classList.remove("hidden");
+  },
+});
+addBlock("Hide HTML Box", {
+  args: [],
+  displayName: "Hide HTML Box",
+  callback: () => {
+    document.getElementById("html_box").classList.add("hidden");
+  },
+});
+addBlock("Clear HTML Box", {
+  args: [],
+  displayName: "Clear HTML Box",
+  callback: () => {
+    document.getElementById("html_box").innerHTML = "";
+  },
+});
+addBlock("Set HTML of HTML Box to: %s", {
+  args: ["content"],
+  displayName: "block-log",
+  callback: ({ content }, thread) => {
+    document.getElementById("html_box").innerHTML = content;
+  },
+});
+addBlock("Add HTML to HTML Box: %s", {
+  args: ["content"],
+  displayName: "block-log",
+  callback: ({ content }, thread) => {
+    document.getElementById("html_box").innerHTML += content;
+  },
+});
+addBlock("Unfocus HTML Box", {
+  args: [],
+  displayName: "Unfocus HTML Box",
+  callback: () => {
+    document.getElementById("html_box").classList.add("unfocused");
+  },
+});
+addBlock("Focus HTML Box", {
+  args: [],
+  displayName: "Focus HTML Box",
+  callback: () => {
+    document.getElementById("html_box").classList.remove("unfocused");
   },
 });
 init();
@@ -1008,6 +1057,35 @@ function totalBlocks() {
   return a;
 }
 
+function initCanvasHTMLOverlay() {
+  if (document.getElementById("html_box")) {
+    document.getElementById("html_box").remove();
+  } else {
+    addEventListener("resize", () => {
+      document
+        .getElementById("html_box")
+        .setAttribute(
+          "style",
+          `${document
+            .getElementsByTagName("canvas")[0]
+            .getAttribute(
+              "style"
+            )} transform: translate(0px, -100%); z-index:99;`
+        );
+    });
+  }
+  var htmlbox = document.createElement("div");
+  htmlbox.id = "html_box";
+  htmlbox.classList.add("hidden");
+  htmlbox.setAttribute(
+    "style",
+    `${document
+      .getElementsByTagName("canvas")[0]
+      .getAttribute("style")} transform: translate(0px, -100%); z-index:99;`
+  );
+  document.getElementsByTagName("canvas")[0].parentElement.appendChild(htmlbox);
+}
+initCanvasHTMLOverlay();
 function totalTopBlocks() {
   return Blockly.getMainWorkspace().getTopBlocks().length ?? 0;
 }
@@ -1166,11 +1244,20 @@ function closeModMenu() {
   document.getElementById("menu").remove();
 }
 
+function hideModMenu() {
+  document.getElementById("menu").classList.add("hidden");
+  document.getElementById("showbtn").classList.remove("hidden");
+}
+function showModMenu() {
+  document.getElementById("menu").classList.remove("hidden");
+  document.getElementById("showbtn").classList.add("hidden");
+}
+
 /*/Create the Draggable Menu/*/
 var menu = document.createElement("div");
 menu.id = "menu";
 menu.innerHTML = `
-<div id="menuheader">ScratchKit Editor v2<button class="button-7" onclick="minimiseModMenu()">🗖</button><button class="button-7" onclick="maximiseModMenu()">⛶</button><button class="button-7" onclick="closeModMenu()">✖</button></div>
+<div id="menuheader">ScratchKit Editor v2<button class="button-7" onclick="minimiseModMenu()">🗖</button><button class="button-7" onclick="maximiseModMenu()">⛶</button><button class="button-7" onclick="hideModMenu()">✖</button></div>
 <div class="tab">
   <button class="tablinks" onclick="openTab(event, 'XML'); prepXML();">XML</button>
   <button class="tablinks" onclick="openTab(event, 'Blocks'); blocksTab();">Blocks</button>
@@ -1193,6 +1280,7 @@ menu.innerHTML = `
 
 <div id="Snippets" class="tabcontent">
   <h3>Snippets</h3>
+  <button class="button-7" onclick="hideModMenu()">Hide Menu</button>
   <button class="button-7" onclick="closeModMenu()">Force Close Menu</button>
   <button class="button-7" onclick="document.getElementsByClassName('injectionDiv')[0].requestFullscreen()" title="JJScript">Fullscreen Editor</button>
 </div>
@@ -1346,6 +1434,12 @@ addStyle(`
     position:relative;
     overflow-y:scroll;
 }
+#showbtn {
+  position:fixed;
+  top:0;
+  left:0;
+  z-index: 99999999;
+}
 #menuheader {
     padding: 10px;
     cursor: move;
@@ -1464,7 +1558,20 @@ td, th {
 .twitchInput:hover {
   border-color: #ccc;
 }
+.hidden {
+  display:none !important;
+}
+.unfocused {
+  pointer-events:none !important;
+}
 `);
+
+var showbtn = document.createElement("button");
+showbtn.id = "showbtn";
+showbtn.classList.add("button-7");
+showbtn.classList.add("hidden");
+showbtn.onclick = showModMenu;
+showbtn.innerText = "kv";
 
 /*/Check if it already exists, and remove it if it does./*/
 if (document.getElementById("menu")) {
@@ -1473,6 +1580,7 @@ if (document.getElementById("menu")) {
 
 /*/Inject the menu and make it draggable/*/
 document.body.appendChild(menu);
+document.body.appendChild(showbtn);
 dragElement(document.getElementById("menu"));
 
 /*/Initialize display/*/
@@ -1497,7 +1605,7 @@ if (!window.kitTick) {
   <tr><td>${totalBlocks()} Block(s)</td><td>${totalVariables()} Variable(s)</td><td>${totalComments()} Comment(s)</td><td>${totalLists()} List(s)</td></tr>
   </table>
   `);
-    /*/blocksTab()/*/
+    // blocksTab();
     /*/console.log("Refreshed opacity")/*/
   });
 }
