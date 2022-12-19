@@ -113,7 +113,10 @@ const addBlock = (proccode, { args, callback, hidden, displayName }) => {
   }
   const procCodeArguments = parseArguments(proccode);
   if (args.length !== procCodeArguments.length) {
-    throw new Error("Procedure code and argument list do not match");
+    throw new Error(
+      "Procedure code and argument list do not match! " +
+        `Args:${args.length}; Procs:${procCodeArguments.length}`
+    );
   }
   if (displayName) {
     displayName = fixDisplayName(displayName);
@@ -287,6 +290,20 @@ addBlock("JavaScript %s", {
     window.eval(content);
   },
 });
+addBlock(
+  "Save JavaScript to Variable: (Sprite Name: %s ) (Variable Name: %s ) (JavaScript: %s )",
+  {
+    args: ["sname", "vname", "js"],
+    displayName: "block-savevar",
+    callback: ({ sname, vname, js }, thread) => {
+      vm.setVariableValue(
+        vm.runtime.getSpriteTargetByName(sname).id,
+        variableNameToId(vname),
+        window.eval(js)
+      );
+    },
+  }
+);
 addBlock("log to console %s", {
   args: ["content"],
   displayName: "block-log",
@@ -303,7 +320,7 @@ addBlock("log warning to console %s", {
 });
 addBlock("log error to console %s", {
   args: ["content"],
-  displayName: "block-warn",
+  displayName: "block-error",
   callback: ({ content }, thread) => {
     console.error(content);
   },
@@ -1055,6 +1072,24 @@ function totalBlocks() {
     }
   }
   return a;
+}
+
+function cloneCounter() {
+  return vm.runtime._cloneCounter ?? 0;
+}
+
+function variableNameToId(name) {
+  var preList = Blockly.getMainWorkspace().getVariableMap().variableMap_[""];
+  preList.concat(
+    Blockly.getMainWorkspace().getVariableMap().variableMap_["list"]
+  );
+  for (let i = 0; i < preList.length; i++) {
+    const v = preList[i];
+    if (v.name == name) {
+      return v.id_;
+    }
+  }
+  return "";
 }
 
 function initCanvasHTMLOverlay() {
