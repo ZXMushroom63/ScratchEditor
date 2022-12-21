@@ -548,58 +548,32 @@ addBlock("Focus HTML Box", {
 init();
 /*/End custom block script injection/*/
 Blockly.getMainWorkspace().options.collapse = true;
-document.oncontextmenu = function () {
-  setTimeout(() => {
-    var e = document.getElementsByClassName("goog-menuitem")[0].outerHTML;
-    (document.getElementsByClassName("goog-menu")[0].style =
-      "overflow: scroll !important; overflow-y: scroll !important"),
-      (document.getElementsByClassName("goog-menuitem-content")[3].innerHTML =
-        "<code>DBK2 - Collapse</code>"),
-      (document.getElementsByClassName("goog-menuitem-content")[4].innerHTML =
-        "<code>DBK2 - Uncollapse</code>");
-    var t = document.getElementsByClassName("goog-menuitem")[0];
-    (t.children[0].innerHTML = "<code>DBK2 - Fullscreen Player</code>"),
-      (t.id = "fullscreen"),
-      t.setAttribute(
-        "onclick",
-        'document.getElementsByTagName("canvas")[0].requestFullscreen();'
-      ),
-      (t.style = "color:black !important"),
-      t.classList.remove("goog-menuitem-disabled"),
-      document
-        .getElementsByClassName("goog-menu")[0]
-        .insertAdjacentHTML("beforeend", t.outerHTML);
-    var t = document.getElementsByClassName("goog-menuitem")[0];
-    (t.children[0].innerHTML = "<code>DBK2 - Fullscreen Editor</code>"),
-      (t.id = "fullscreen_editor"),
-      t.setAttribute(
-        "onclick",
-        "document.getElementsByClassName('injectionDiv')[0].requestFullscreen()"
-      ),
-      (t.style = "color:black !important"),
-      t.classList.remove("goog-menuitem-disabled"),
-      document
-        .getElementsByClassName("goog-menu")[0]
-        .insertAdjacentHTML("beforeend", t.outerHTML);
-    var t = document.getElementsByClassName("goog-menuitem")[0];
-    (t.children[0].innerHTML = "<code>DBK2 - Sin-Cos Swap</code>"),
-      (t.id = "sincos"),
-      t.setAttribute(
-        "onclick",
-        `var tmp = Math.sin; Math.sin = Math.cos; Math.cos = tmp;`
-      ),
-      (t.style = "color:black !important"),
-      t.classList.remove("goog-menuitem-disabled"),
-      document
-        .getElementsByClassName("goog-menu")[0]
-        .insertAdjacentHTML("beforeend", t.outerHTML),
-      document.getElementsByClassName("goog-menuitem")[0].remove(),
-      document
-        .getElementsByClassName("goog-menu")[0]
-        .insertAdjacentHTML("afterbegin", e),
-      console.log("DBK - Hooked into context menu");
-  }, 200);
-};
+createBlockContextMenu(
+  (items, block) => {
+    items.splice(
+      items.length,
+      0,
+      {
+        enabled: true,
+        text: "Collapse/Uncollapse",
+        callback: () => {
+          var collapse = !block.isCollapsed();
+          var children = ScratchBlocks.getMainWorkspace().getTopBlocks()[0].getChildren();
+          for (let i = 0; i < children.length; i++) {
+            const e = array[i];
+            e.setCollapsed(collapse);
+          }
+          block.setCollapsed(collapse);
+
+        },
+        separator: true,
+      }
+    );
+
+    return items;
+  },
+  { blocks: true }
+);
 
 /*/TurboWarp Player/*/
 if (document.getElementById("turbowarp"))
