@@ -1,4 +1,7 @@
 window.alert("ScratchKit v2\nMade by Robert Pirtea");
+if (!location.pathname.includes("editor")) {
+  window.alert("ScratchKit 2 must be run in the scratch editor!");
+}
 function getVM() {
   if (!document.querySelector("#app"))
     throw new Error("Unable to access vm through redux");
@@ -7,6 +10,15 @@ function getVM() {
     [
       Object.keys(app).find((key) => key.startsWith("__reactContainer"))
     ].child.stateNode.store.getState().scratchGui.vm;
+}
+function getAppState() {
+  if (!document.querySelector("#app"))
+    throw new Error("Unable to access vm through redux");
+  window.appState = document
+    .querySelector("#app")
+    [
+      Object.keys(app).find((key) => key.startsWith("__reactContainer"))
+    ].child.stateNode.store.getState();
 }
 function getBlockly() {
   window.REACT_INTERNAL_PREFIX =
@@ -31,7 +43,80 @@ function getBlockly() {
 }
 getBlockly();
 getVM();
+getAppState();
+var global_fps = 30;
+vm.runtime.start = function () {
+  if (this._steppingInterval) return;
+  let interval = 1000 / global_fps;
+  this.currentStepTime = interval;
+  this._steppingInterval = setInterval(() => {
+    this._step();
+  }, interval);
+  this.emit("RUNTIME_STARTED");
+};
+function setFPS(fps) {
+  global_fps = fps;
+
+  clearInterval(vm.runtime._steppingInterval);
+  vm.runtime._steppingInterval = null;
+  vm.runtime.start();
+};
+setFPS(30);
+function modTarget(target) {
+  switch (target) {
+    case "size":
+      vm.editingTarget.size =
+        window.prompt(
+          "Set size of " + vm.editingTarget.getName(),
+          vm.editingTarget.size
+        ) * 1;
+        vm.emitTargetsUpdate();
+      break;
+      case "x":
+        vm.editingTarget.x =
+          window.prompt(
+            "Set x pos of " + vm.editingTarget.getName(),
+            vm.editingTarget.x
+          ) * 1;
+          vm.emitTargetsUpdate();
+        break;
+        case "y":
+        vm.editingTarget.y =
+          window.prompt(
+            "Set y pos of " + vm.editingTarget.getName(),
+            vm.editingTarget.y
+          ) * 1;
+          vm.emitTargetsUpdate();
+        break;
+        case "removeFencing":
+          vm.runtime.renderer._xLeft=Infinity*-1;
+          vm.runtime.renderer._xRight=Infinity*1;
+          vm.runtime.renderer._yTop=Infinity*1;
+          vm.runtime.renderer._yBottom=Infinity*-1;
+          break;
+  }
+}
+
 /*/Start custom block script injection/*/
+function initForceir() {
+  var forceir = document.createElement("div");
+  forceir.id = "forceir";
+  forceir.setAttribute("title", "Forceir Menu");
+  forceir.innerHTML = `
+  <details>
+    <summary>> Forceir</summary>
+    <button onclick="modTarget('size')">Set Size</button>
+    <button onclick="modTarget('x')">Set X</button>
+    <button onclick="modTarget('y')">Set Y</button>
+    <button onclick="modTarget('removeFencing');this.remove();">Remove Fencing</button>
+    <button onclick="setFPS(30);">Set FPS to 30 [default]</button>
+    <button onclick="setFPS(60);">Set FPS to 60</button>
+  </details>
+  `;
+  document
+    .getElementsByClassName("sprite-info_sprite-info_3EyZh box_box_2jjDp")[0]
+    .appendChild(forceir);
+}
 const ICON =
   "data:image/svg+xml;base64," +
   btoa(
@@ -1108,6 +1193,18 @@ function initCanvasHTMLOverlay() {
             )} transform: translate(0px, -100%); z-index:99;`
         );
     });
+    addEventListener("click", () => {
+      document
+        .getElementById("html_box")
+        .setAttribute(
+          "style",
+          `${document
+            .getElementsByTagName("canvas")[0]
+            .getAttribute(
+              "style"
+            )} transform: translate(0px, -100%); z-index:99;`
+        );
+    });
   }
   var htmlbox = document.createElement("div");
   htmlbox.id = "html_box";
@@ -1300,6 +1397,7 @@ menu.innerHTML = `
   <button class="tablinks" onclick="openTab(event, 'Store')">Store</button>
   <button class="tablinks" onclick="openTab(event, 'Snippets');">Snippets</button>
   <button class="tablinks" onclick="openTab(event, 'Vars'); varsTab();">Variables</button>
+  <button class="tablinks" onclick="openTab(event, 'Help');">Help</button>
   <button class="tablinks" onclick="openTab(event, 'About')">About</button>
 </div>
 <div id="XML"class="tabcontent">
@@ -1443,6 +1541,122 @@ menu.innerHTML = `
   <h3>Variables</h3>
   <button class="button-7" onclick="clearUnusedLocalVariables(Blockly.getMainWorkspace())" title="Remove Unused Local Variables">🧹</button>
   <div id="varsList"></div>
+</div>
+<div id="Help" class="tabcontent">
+  <h3>Help</h3>
+  <details>
+    <summary>The SK2 Blocks</summary>
+    The new category, <a href="javascript:window.alert('SK2: Scratch Kit 2');">'SK2 Blocks'</a> adds multiple new blocks.<br>
+    <table>
+      <tr>
+        <td>alert (text)</td>
+        <td>The alert block will alert the text provided.<br>Args: Text</td>
+      </tr>
+      <tr>
+        <td>JavaScript (js)</td>
+        <td>The JS block run the javascript code it is given.<br>Args: JavaScript</td>
+      </tr>
+      <tr>
+        <td>[tmp] Save JS to Var (sprite) (var) (js)</td>
+        <td>This block will get a variable from a sprite, and set it's value to the javascript code.<br>Args: SpriteName, VariableName, JavaScript</td>
+      </tr>
+      <tr>
+        <td>log to console (text)</td>
+        <td>Logs text to the console.<br>Args: Text</td>
+      </tr>
+      <tr>
+        <td>log warning to console (text)</td>
+        <td>Logs text to the console as a warning.<br>Args: Text</td>
+      </tr>
+      <tr>
+        <td>log error to console (text)</td>
+        <td>Logs text to the console as an error.<br>Args: Text</td>
+      </tr>
+      <tr>
+        <td>clear console</td>
+        <td>Clears the console.</td>
+      </tr>
+      <tr>
+        <td>inject console</td>
+        <td>Injects the eruda console in to scratch.</td>
+      </tr>
+      <tr>
+        <td>rStore</td>
+        <td>Just so you know who made it.</td>
+      </tr>
+      <tr>
+        <td>Show HTML Box</td>
+        <td>(self explanatory)</td>
+      </tr>
+      <tr>
+        <td>Hide HTML Box</td>
+        <td>(self explanatory)</td>
+      </tr>
+      <tr>
+        <td>Clear HTML Box</td>
+        <td>Clears the html box of all html</td>
+      </tr>
+      <tr>
+        <td>Set HTML of HTML Box to (html)</td>
+        <td>Sets the content of the HTML Box.<br>Args: HTML</td>
+      </tr>
+      <tr>
+        <td>Add HTML to HTML Box (html)</td>
+        <td>Add html to the html box.<br>Args: HTML</td>
+      </tr>
+      <tr>
+        <td>Unfocus HTML Box</td>
+        <td>Makes it so that you interact with the project rather than the html box.</td>
+      </tr>
+      <tr>
+        <td>Focus HTML Box</td>
+        <td>Makes it so that you interact with the html box rather than the project. [default]</td>
+      </tr>
+    </table>
+  </details><br>
+  <details>
+    <summary>The XML Tab</summary>
+    The XML Tab represents the raw xml code of the current sprite. To modify it, just edit the text and press the save (💾) button.
+    <br>It is important to note that this tab does not automatically update to prevent lag. To refresh the xml code to match the current, just click on the XML tab again.
+  </details><br>
+  <details>
+    <summary>The Blocks Tab</summary>
+    The Blocks tab is a collection of all the top blocks in the current sprite. All the top blocks are presented in a table. Each top block has 2 icons.<br>
+    The View (👁️) button will center the camera on that block.<br>
+    The Delete (🗑️) button will delete that block.<br>
+    On top of the table is the Clean-Up (🧹) button. When clicked, it will delete all <a href="javascript:window.alert('Orphan: Blocks not connected to other blocks.');">'Orphan'</a> blocks.<br>
+    Just like the XML tab, the Blocks tab does not update dynamically. To force it to update it's table, just click on the blocks tab again.
+  </details><br>
+  <details>
+    <summary>The Options Tab</summary>
+    The options tab contains controls for multiple things.<br>
+    Click on '> Theming' to open the theming menu.
+  </details><br>
+  <details>
+    <summary>The Store Tab</summary>
+    The store tab contains buttons that add a hidden block to scratch.<br>
+    Unlike the SK2 Blocks, these blocks work without the plugin activated.<br>
+    At the very bottom of this tab, there are some custom block activators.
+  </details><br>
+  <details>
+    <summary>The Snippets</summary>
+    Contains nice snippets.<br>
+    Generally used as a fallback for mobile.
+  </details><br>
+  <details>
+    <summary>The Variables Tab</summary>
+    Displays the variables of the current sprite along with some of their data.<br>
+    Each variable has 2 actions: Delete (🗑️) and Rename (✏️).<br>
+    Just like in the blocks tab, the variables tab has a clean up (🧹) button too. This one deletes all <a href="javascript:window.alert('Local variables with no uses.')">'unlocal'</a> variables.
+  </details><br>
+  <details>
+    <summary>The Help Tab</summary>
+    You're looking at it.
+  </details><br>
+  <details>
+    <summary>The About Tab</summary>
+    What about it?
+  </details><br>
 </div>
 <div id="About" class="tabcontent">
   <h3>About</h3>
@@ -1599,8 +1813,64 @@ td, th {
 .unfocused {
   pointer-events:none !important;
 }
+
+.scratchCategoryItemBubble {
+  position: relative;
+}
+
+.scratchCategoryItemBubble::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.scratchCategoryId-motion .scratchCategoryItemBubble::after {
+  background-image: url(//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/icons/motion_icon.svg);
+}
+
+.scratchCategoryId-looks .scratchCategoryItemBubble::after {
+  background-image: url(//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/icons/looks_icon.svg);
+}
+
+.scratchCategoryId-sound .scratchCategoryItemBubble::after {
+  background-image: url(//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/icons/sound_icon.svg);
+}
+
+.scratchCategoryId-events .scratchCategoryItemBubble::after {
+  background-image: url(//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/icons/events_icon.svg);
+}
+
+.scratchCategoryId-control .scratchCategoryItemBubble::after {
+  background-image: url(//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/icons/control_icon.svg);
+}
+
+.scratchCategoryId-sensing .scratchCategoryItemBubble::after {
+  background-image: url(//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/icons/sensing_icon.svg);
+}
+
+.scratchCategoryId-operators .scratchCategoryItemBubble::after {
+  background-image: url(//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/icons/operators_icon.svg);
+}
+
+.scratchCategoryId-variables .scratchCategoryItemBubble::after {
+  background-image: url(//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/icons/variables_icon.svg);
+}
+
+.scratchCategoryId-lists .scratchCategoryItemBubble::after {
+  background-image: url(//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/icons/list_icon.svg);
+}
+
+.scratchCategoryId-myBlocks .scratchCategoryItemBubble::after {
+  background-image: url(//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/icons/block_icon.svg);
+}
 `);
 
+/*/Make a button that shows the menu when clicked/*/
 var showbtn = document.createElement("button");
 showbtn.id = "showbtn";
 showbtn.classList.add("button-7");
@@ -1617,6 +1887,9 @@ if (document.getElementById("menu")) {
 document.body.appendChild(menu);
 document.body.appendChild(showbtn);
 dragElement(document.getElementById("menu"));
+
+/*/Initialize the Forceir menu/*/
+initForceir();
 
 /*/Initialize display/*/
 initDisplay();
