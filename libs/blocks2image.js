@@ -101,7 +101,6 @@ createBlockContextMenu(
 );
 createBlockContextMenu(
   (items, block) => {
-    if (addon.self.disabled) return items;
     const makeSpaceItemIndex = items.findIndex(
       (obj) => obj._isDevtoolsFirstItem
     );
