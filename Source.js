@@ -60,8 +60,19 @@ function setFPS(fps) {
   clearInterval(vm.runtime._steppingInterval);
   vm.runtime._steppingInterval = null;
   vm.runtime.start();
-};
+}
 setFPS(30);
+function injectScript(url) {
+  fetch(url).then((x) => {
+    x.blob().then((y) => {
+      y.text().then((z) => {
+        var script = document.createElement("script");
+        script.innerHTML = z;
+        document.body.appendChild(script);
+      });
+    });
+  });
+}
 function modTarget(target) {
   switch (target) {
     case "size":
@@ -70,30 +81,30 @@ function modTarget(target) {
           "Set size of " + vm.editingTarget.getName(),
           vm.editingTarget.size
         ) * 1;
-        vm.emitTargetsUpdate();
+      vm.emitTargetsUpdate();
       break;
-      case "x":
-        vm.editingTarget.x =
-          window.prompt(
-            "Set x pos of " + vm.editingTarget.getName(),
-            vm.editingTarget.x
-          ) * 1;
-          vm.emitTargetsUpdate();
-        break;
-        case "y":
-        vm.editingTarget.y =
-          window.prompt(
-            "Set y pos of " + vm.editingTarget.getName(),
-            vm.editingTarget.y
-          ) * 1;
-          vm.emitTargetsUpdate();
-        break;
-        case "removeFencing":
-          vm.runtime.renderer._xLeft=Infinity*-1;
-          vm.runtime.renderer._xRight=Infinity*1;
-          vm.runtime.renderer._yTop=Infinity*1;
-          vm.runtime.renderer._yBottom=Infinity*-1;
-          break;
+    case "x":
+      vm.editingTarget.x =
+        window.prompt(
+          "Set x pos of " + vm.editingTarget.getName(),
+          vm.editingTarget.x
+        ) * 1;
+      vm.emitTargetsUpdate();
+      break;
+    case "y":
+      vm.editingTarget.y =
+        window.prompt(
+          "Set y pos of " + vm.editingTarget.getName(),
+          vm.editingTarget.y
+        ) * 1;
+      vm.emitTargetsUpdate();
+      break;
+    case "removeFencing":
+      vm.runtime.renderer._xLeft = Infinity * -1;
+      vm.runtime.renderer._xRight = Infinity * 1;
+      vm.runtime.renderer._yTop = Infinity * 1;
+      vm.runtime.renderer._yBottom = Infinity * -1;
+      break;
   }
 }
 
@@ -1917,3 +1928,6 @@ if (!window.kitTick) {
     /*/console.log("Refreshed opacity")/*/
   });
 }
+
+/*/Inject more modules/*/
+injectScript("//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/dataTweaks.js");
