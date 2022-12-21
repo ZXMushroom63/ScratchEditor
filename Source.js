@@ -1930,4 +1930,4 @@ if (!window.kitTick) {
 }
 
 /*/Inject more modules/*/
-injectScript("//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/dataTweaks.js");
+//injectScript("//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/dataTweaks.js");
