@@ -10,6 +10,7 @@ function getVM() {
     [
       Object.keys(app).find((key) => key.startsWith("__reactContainer"))
     ].child.stateNode.store.getState().scratchGui.vm;
+  console.log("Got VM");
 }
 function getAppState() {
   if (!document.querySelector("#app"))
@@ -19,12 +20,31 @@ function getAppState() {
     [
       Object.keys(app).find((key) => key.startsWith("__reactContainer"))
     ].child.stateNode.store.getState();
+  console.log("Got appState");
 }
 function getInternalKey(elem) {
   var _react_internal_key = Object.keys(elem).find((key) =>
     key.startsWith("__reactInternalInstance$")
   );
   return this._react_internal_key;
+}
+function getSoundEditor() {
+  var hookSoundEditor = () => {
+    setTimeout(() => {
+      var sa = document
+        .querySelector('[class*="sound-editor_row-reverse_"] > :nth-child(10)')
+        .closest('[class*="sound-editor_editor-container_"]');
+      var key = getInternalKey(sa);
+      window.SoundEditor = sa[key].return.return.return.stateNode;
+      console.log("Got SoundEditor");
+      document
+        .getElementById("react-tabs-4")
+        .removeEventListener("click", hookSoundEditor);
+    }, 10);
+  };
+  document
+    .getElementById("react-tabs-4")
+    .addEventListener("click", hookSoundEditor);
 }
 function getBlockly() {
   window.REACT_INTERNAL_PREFIX =
@@ -46,10 +66,13 @@ function getBlockly() {
     !childable || !childable.stateNode || !childable.stateNode.ScratchBlocks)
   ) {}
   window.ScratchBlocks = childable.stateNode.ScratchBlocks;
+  console.log("Got Blockly");
 }
 getBlockly();
 getVM();
 getAppState();
+getSoundEditor();
+
 var global_fps = 30;
 vm.runtime.start = function () {
   if (this._steppingInterval) return;
