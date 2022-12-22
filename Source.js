@@ -20,6 +20,12 @@ function getAppState() {
       Object.keys(app).find((key) => key.startsWith("__reactContainer"))
     ].child.stateNode.store.getState();
 }
+function getInternalKey(elem) {
+  var _react_internal_key = Object.keys(elem).find((key) =>
+    key.startsWith("__reactInternalInstance$")
+  );
+  return this._react_internal_key;
+}
 function getBlockly() {
   window.REACT_INTERNAL_PREFIX =
     "__reactInternalInstance$"; /*/GetScratchBlocksModal Script by Robert Pirtea/*/
@@ -28,7 +34,7 @@ function getBlockly() {
   function getInternalKey(elem) {
     if (!window._react_internal_key) {
       window._react_internal_key = Object.keys(elem).find((key) =>
-        key.startsWith(this.REACT_INTERNAL_PREFIX)
+        key.startsWith(REACT_INTERNAL_PREFIX)
       );
     }
     return window._react_internal_key;
@@ -128,52 +134,78 @@ function initForceir() {
     .getElementsByClassName("sprite-info_sprite-info_3EyZh box_box_2jjDp")[0]
     .appendChild(forceir);
 }
-const contextMenuCallbacks = [];
-const CONTEXT_MENU_ORDER = ["editor-devtools", "block-switching", "blocks2image", "swap-local-global"];
-let createdAnyBlockContextMenus = false;
-function createBlockContextMenu(callback, { workspace = false, blocks = false, flyout = false, comments = false } = {}) {
-  contextMenuCallbacks.push({ addonId: this._addonId, callback, workspace, blocks, flyout, comments });
 
-  contextMenuCallbacks.sort((b, a) => CONTEXT_MENU_ORDER.indexOf(b.addonId) - CONTEXT_MENU_ORDER.indexOf(a.addonId));
+const contextMenuCallbacks = [];
+const CONTEXT_MENU_ORDER = [
+  "editor-devtools",
+  "block-switching",
+  "blocks2image",
+  "swap-local-global",
+];
+let createdAnyBlockContextMenus = false;
+function createBlockContextMenu(
+  callback,
+  { workspace = false, blocks = false, flyout = false, comments = false } = {}
+) {
+  contextMenuCallbacks.push({
+    addonId: this._addonId,
+    callback,
+    workspace,
+    blocks,
+    flyout,
+    comments,
+  });
+
+  contextMenuCallbacks.sort(
+    (b, a) =>
+      CONTEXT_MENU_ORDER.indexOf(b.addonId) -
+      CONTEXT_MENU_ORDER.indexOf(a.addonId)
+  );
 
   if (createdAnyBlockContextMenus) return;
   createdAnyBlockContextMenus = true;
 
   const oldShow = ScratchBlocks.ContextMenu.show;
-    ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
-      const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
-      const block = gesture.targetBlock_;
+  ScratchBlocks.ContextMenu.show = function (event, items, rtl) {
+    const gesture = ScratchBlocks.mainWorkspace.currentGesture_;
+    const block = gesture.targetBlock_;
 
-      for (const { callback, workspace, blocks, flyout, comments } of contextMenuCallbacks) {
-        let injectMenu =
-          // Workspace
-          (workspace && !block && !gesture.flyout_ && !gesture.startBubble_) ||
-          // Block in workspace
-          (blocks && block && !gesture.flyout_) ||
-          // Block in flyout
-          (flyout && gesture.flyout_) ||
-          // Comments
-          (comments && gesture.startBubble_);
-        if (injectMenu) {
-          try {
-            items = callback(items, block);
-          } catch (e) {
-            console.error("Error while calling context menu callback: ", e);
-          }
+    for (const {
+      callback,
+      workspace,
+      blocks,
+      flyout,
+      comments,
+    } of contextMenuCallbacks) {
+      let injectMenu =
+        // Workspace
+        (workspace && !block && !gesture.flyout_ && !gesture.startBubble_) ||
+        // Block in workspace
+        (blocks && block && !gesture.flyout_) ||
+        // Block in flyout
+        (flyout && gesture.flyout_) ||
+        // Comments
+        (comments && gesture.startBubble_);
+      if (injectMenu) {
+        try {
+          items = callback(items, block);
+        } catch (e) {
+          console.error("Error while calling context menu callback: ", e);
         }
       }
+    }
 
-      oldShow.call(this, event, items, rtl);
+    oldShow.call(this, event, items, rtl);
 
-      const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
-      items.forEach((item, i) => {
-        if (i !== 0 && item.separator) {
-          const itemElt = blocklyContextMenu.children[i];
-          itemElt.style.paddingTop = "2px";
-          itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
-        }
-      });
-    };
+    const blocklyContextMenu = ScratchBlocks.WidgetDiv.DIV.firstChild;
+    items.forEach((item, i) => {
+      if (i !== 0 && item.separator) {
+        const itemElt = blocklyContextMenu.children[i];
+        itemElt.style.paddingTop = "2px";
+        itemElt.style.borderTop = "1px solid hsla(0, 0%, 0%, 0.15)";
+      }
+    });
+  };
 }
 const ICON =
   "data:image/svg+xml;base64," +
@@ -550,25 +582,22 @@ init();
 Blockly.getMainWorkspace().options.collapse = true;
 createBlockContextMenu(
   (items, block) => {
-    items.splice(
-      items.length,
-      0,
-      {
-        enabled: true,
-        text: "Collapse/Uncollapse",
-        callback: () => {
-          var collapse = !block.isCollapsed();
-          var children = ScratchBlocks.getMainWorkspace().getTopBlocks()[0].getChildren();
-          for (let i = 0; i < children.length; i++) {
-            const e = array[i];
-            e.setCollapsed(collapse);
-          }
-          block.setCollapsed(collapse);
-
-        },
-        separator: true,
-      }
-    );
+    items.splice(items.length, 0, {
+      enabled: true,
+      text: "Collapse/Uncollapse",
+      callback: () => {
+        var collapse = !block.isCollapsed();
+        var children = ScratchBlocks.getMainWorkspace()
+          .getTopBlocks()[0]
+          .getChildren();
+        for (let i = 0; i < children.length; i++) {
+          const e = array[i];
+          e.setCollapsed(collapse);
+        }
+        block.setCollapsed(collapse);
+      },
+      separator: true,
+    });
 
     return items;
   },
@@ -1951,4 +1980,6 @@ if (!window.kitTick) {
 }
 
 /*/Inject more modules/*/
-injectScript("//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/libs/blocks2image.js");
+injectScript(
+  "//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/libs/blocks2image.js"
+);
