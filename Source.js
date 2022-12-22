@@ -28,18 +28,18 @@ function getInternalKey(elem) {
   );
   return this._react_internal_key;
 }
+function _getsoundeditor() {
+  var sa = document
+    .querySelector('[class*="sound-editor_row-reverse_"] > :nth-child(10)')
+    .closest('[class*="sound-editor_editor-container_"]');
+  var key = getInternalKey(sa);
+  window.SoundEditor = sa[key].return.return.return.stateNode;
+  console.log("Got SoundEditor");
+}
 function getSoundEditor() {
   var hookSoundEditor = () => {
     setTimeout(() => {
-      var sa = document
-        .querySelector('[class*="sound-editor_row-reverse_"] > :nth-child(10)')
-        .closest('[class*="sound-editor_editor-container_"]');
-      var key = getInternalKey(sa);
-      window.SoundEditor = sa[key].return.return.return.stateNode;
-      console.log("Got SoundEditor");
-      document
-        .getElementById("react-tabs-4")
-        .removeEventListener("click", hookSoundEditor);
+      _getsoundeditor();
     }, 10);
   };
   document
