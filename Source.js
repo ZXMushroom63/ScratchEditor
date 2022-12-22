@@ -2006,3 +2006,6 @@ if (!window.kitTick) {
 injectScript(
   "//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/libs/blocks2image.js"
 );
+injectScript(
+  "//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/libs/echo.js"
+);
