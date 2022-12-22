@@ -144,7 +144,7 @@ function initForceir() {
   forceir.setAttribute("title", "Forceir Menu");
   forceir.innerHTML = `
   <details>
-    <summary>> Forceir</summary>
+    <summary>> Forcer</summary>
     <button onclick="modTarget('size')">Set Size</button>
     <button onclick="modTarget('x')">Set X</button>
     <button onclick="modTarget('y')">Set Y</button>
@@ -1628,6 +1628,25 @@ menu.innerHTML = `
 </div>
 <div id="Help" class="tabcontent">
   <h3>Help</h3>
+  <details>
+    <summary>(Nearly) Complete Feature List</summary>
+    <ul>
+      <li>Hacks Blockly, AppState, VM and SoundEditor</li>
+      <li>Adds custom blocks to allow for HTML and JavaScript within Scratch</li>
+      <li>Adds back the Echo effect in the sound editor</li>
+      <li>Options Tab allows for customizing look of blocks using opacity AND theming.</li>
+      <li>Store tab allows to add hidden scratch blocks.</li>
+      <li>Adds a heads up display to show stats in current sprite</li>
+      <li>Blocks tab allows to view and quickly clean up blocks in the current sprite</li>
+      <li>XML tab lets you modify the raw code of the sprite</li>
+      <li>Enable all blocks to become Uwu cats in the options menu</li>
+      <li>Controls for many things in the options menu</li>
+      <li>Variables tab allows to view and clear unused local variables.</li>
+      <li>Add custom key blocks at the bottom of the Store tab</li>
+      <li>Flip blocks backwards in Options Tab (RTL)</li>
+      <li>Export blocks to either PNG or SVG in the right-click menu.</li>
+    </ul>
+  </details>
   <details>
     <summary>The SK2 Blocks</summary>
     The new category, <a href="javascript:window.alert('SK2: Scratch Kit 2');">'SK2 Blocks'</a> adds multiple new blocks.<br>
