@@ -9,6 +9,7 @@ function addEchoEffect() {
     echoButton.className =
       "icon-button_container_278u5 sound-editor_effect-button_2zuzT";
     echoButton.addEventListener("click", () => {
+      _getsoundeditor();
       SoundEditor.handleEffect("echo");
     });
     const echoIcon = Object.assign(document.createElement("img"), {
