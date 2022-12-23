@@ -489,13 +489,14 @@ addBlock("JavaScript %s", {
   },
 });
 addBlock(
-  "Save JavaScript to Variable: (Sprite Name: %s ) (Variable Name: %s ) (JavaScript: %s )",
+  "Save JavaScript to Variable: (Variable Name: %s ) (JavaScript: %s )",
   {
-    args: ["sname", "vname", "js"],
+    args: ["vname", "js"],
     displayName: "block-savevar",
-    callback: ({ sname, vname, js }, thread) => {
+    hide: true,
+    callback: ({ vname, js }, thread) => {
       vm.setVariableValue(
-        vm.runtime.getSpriteTargetByName(sname).id,
+        thread.target.id,
         variableNameToId(vname),
         window.eval(js)
       );
