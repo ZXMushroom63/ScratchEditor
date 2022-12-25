@@ -1,7 +1,7 @@
-//NumberPad Module
-const originalMouseDown = ScratchBlocks.FieldNumber.prototype.showEditor_;
+//Module.NumberPad
+const originalShowEditor_ = ScratchBlocks.FieldNumber.prototype.showEditor_;
 ScratchBlocks.FieldNumber.prototype.showEditor_ = function (...args) {
 this.useTouchInteraction_ = true;
-return originalMouseDown.apple(this, args);
+return originalShowEditor_.apply(this, args);
 }
-//Smthing else
+//Module.Pause
