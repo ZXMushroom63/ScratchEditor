@@ -2029,3 +2029,6 @@ injectScript(
 injectScript(
   "//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/libs/echo.js"
 );
+injectScript(
+  "//raw.githubusercontent.com/ZXMushroom63/ScratchEditor/main/libs/numberpad.js"
+);
