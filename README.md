@@ -1,12 +1,22 @@
 # ScratchEditor
-Fully javascript coded tool to hack scratch. Run as a bookmarklet or whatnot.
-
+Fully javascript coded tool to hack scratch. Run as a bookmarklet or whatnot.<br>
+<br>
+<br>
+<br><a href="Bookmarklet.md">A bookmarklet. Click here to figure out how to install it.</a>
 ```javascript
 javascript: fetch( window.atob( "Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL1pYTXVzaHJvb202My9TY3JhdGNoRWRpdG9yL21haW4vU291cmNlLmpz" ) ).then((x) => { x.blob().then((y) => { y.text().then((z) => { var script = document.createElement("script"); script.innerHTML = z; document.body.appendChild(script); }); }); }); /*/Bookmarklet/*/;
 ```
+<small>^ A peice of javascript to load and inject Source.js</small><br>
+
 So far can:
 <br>
 Add custom blocks!!!!!!!!!!!!!!!!
+<br>
+Add back the echo effect.
+<br>
+Add a pause button.
+<br>
+Show the number pad on desktop
 <br>
 Access full blockly
 <br>
