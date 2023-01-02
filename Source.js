@@ -1499,6 +1499,8 @@ menu.innerHTML = `
 <div id="Snippets" class="tabcontent">
   <h3>Snippets</h3>
   <button class="button-7" onclick="hideModMenu()">Hide Menu</button>
+  <button class="button-7" onclick="maximiseModMenu()">Maximise Menu</button>
+  <button class="button-7" onclick="minimiseModMenu()">Minimise Menu</button>
   <button class="button-7" onclick="closeModMenu()">Force Close Menu</button>
   <button class="button-7" onclick="document.getElementsByClassName('injectionDiv')[0].requestFullscreen()" title="JJScript">Fullscreen Editor</button>
 </div>
