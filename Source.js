@@ -1980,7 +1980,7 @@ showbtn.id = "showbtn";
 showbtn.classList.add("button-7");
 showbtn.classList.add("hidden");
 showbtn.onclick = showModMenu;
-showbtn.innerText = "kv";
+showbtn.innerText = "⛶";
 
 /*/Check if it already exists, and remove it if it does./*/
 if (document.getElementById("menu")) {
