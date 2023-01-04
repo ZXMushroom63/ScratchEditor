@@ -1474,7 +1474,7 @@ function showModMenu() {
 var menu = document.createElement("div");
 menu.id = "menu";
 menu.innerHTML = `
-<div id="menuheader">ScratchKit Editor v2<button class="button-7" onclick="minimiseModMenu()">🗖</button><button class="button-7" onclick="maximiseModMenu()">⛶</button><button class="button-7" onclick="hideModMenu()">✖</button></div>
+<div id="menuheader"><a href="https://github.com/ZXMushroom63/ScratchEditor">ScratchKit Editor v2</a><button class="button-7" onclick="minimiseModMenu()">🗖</button><button class="button-7" onclick="maximiseModMenu()">⛶</button><button class="button-7" onclick="hideModMenu()">✖</button></div>
 <div class="tab">
   <button class="tablinks" onclick="openTab(event, 'XML'); prepXML();">XML</button>
   <button class="tablinks" onclick="openTab(event, 'Blocks'); blocksTab();">Blocks</button>
