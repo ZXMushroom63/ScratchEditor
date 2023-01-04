@@ -1474,7 +1474,7 @@ function showModMenu() {
 var menu = document.createElement("div");
 menu.id = "menu";
 menu.innerHTML = `
-<div id="menuheader"><a href="https://github.com/ZXMushroom63/ScratchEditor">ScratchKit Editor v2</a><button class="button-7" onclick="minimiseModMenu()">🗖</button><button class="button-7" onclick="maximiseModMenu()">⛶</button><button class="button-7" onclick="hideModMenu()">✖</button></div>
+<div id="menuheader">ScratchKit Editor v2<button class="button-7" onclick="minimiseModMenu()">🗖</button><button class="button-7" onclick="maximiseModMenu()">⛶</button><button class="button-7" onclick="hideModMenu()">✖</button></div>
 <div class="tab">
   <button class="tablinks" onclick="openTab(event, 'XML'); prepXML();">XML</button>
   <button class="tablinks" onclick="openTab(event, 'Blocks'); blocksTab();">Blocks</button>
@@ -1766,7 +1766,7 @@ menu.innerHTML = `
 </div>
 <div id="About" class="tabcontent">
   <h3>About</h3>
-  <p>ScratchKit v2 is a powerful mod menu for scratch inspired by the original ScratchKit. Both were developed by me, Robert Pirtea.</p>
+  <p>ScratchKit v2 is a powerful mod menu for scratch inspired by the original ScratchKit. Both were developed by me, Robert Pirtea.</p><a href="https://github.com/ZXMushroom63/ScratchEditor">View Source</a>
 </div>
 `;
 
