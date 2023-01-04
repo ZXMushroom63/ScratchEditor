@@ -1,4 +1,4 @@
-# ScratchEditor
+# &#83;&#99;&#114;&#97;&#116;&#99;&#104;&#69;&#100;&#105;&#116;&#111;&#114;&#32;&#98;&#121;&#32;&#90;&#88;&#77;&#117;&#115;&#104;&#114;&#111;&#111;&#109;&#54;&#53;
 Fully javascript coded tool to hack scratch. Run as a bookmarklet or whatnot.<br>
 <br>
 <br>
