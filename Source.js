@@ -570,21 +570,21 @@ addBlock("Clear HTML Box", {
   args: [],
   displayName: "Clear HTML Box",
   callback: () => {
-    document.getElementById("html_box").innerHTML = "";
+    document.getElementById("html_box").srcdoc = "";
   },
 });
 addBlock("Set HTML of HTML Box to: %s", {
   args: ["content"],
   displayName: "block-log",
   callback: ({ content }, thread) => {
-    document.getElementById("html_box").innerHTML = content;
+    document.getElementById("html_box").srcdoc = content;
   },
 });
 addBlock("Add HTML to HTML Box: %s", {
   args: ["content"],
   displayName: "block-log",
   callback: ({ content }, thread) => {
-    document.getElementById("html_box").innerHTML += content;
+    document.getElementById("html_box").srcdoc += content;
   },
 });
 addBlock("Unfocus HTML Box", {
