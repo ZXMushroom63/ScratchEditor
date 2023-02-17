@@ -1291,9 +1291,10 @@ function initCanvasHTMLOverlay() {
         );
     });
   }
-  var htmlbox = document.createElement("div");
+  var htmlbox = document.createElement("iframe");
   htmlbox.id = "html_box";
   htmlbox.classList.add("hidden");
+  htmlbox.setAttribute("frameborder","0")
   htmlbox.setAttribute(
     "style",
     `${document
