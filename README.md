@@ -42,4 +42,3 @@ And more...
 <br><br>
 Most bits made by Me! Please don't steal.<br>
 I used ScratchAddons' code for vm and blockly trapping<br>
-For <a href="https://sites.google.com/student.carey.wa.edu.au/r-store/home">rStore</a>.
