@@ -48,7 +48,7 @@ function getSoundEditor() {
 }
 function getBlockly() {
   window.REACT_INTERNAL_PREFIX =
-    "__reactInternalInstance$"; /*/GetScratchBlocksModal Script by Robert Pirtea/*/
+    "__reactInternalInstance$"; /*/GetScratchBlocksModal Script by ZXMushroom63/*/
   window.BLOCKS_CLASS = '[class^="gui_blocks-wrapper"]';
   window.elem = document.querySelector(BLOCKS_CLASS);
   function getInternalKey(elem) {
@@ -549,7 +549,7 @@ addBlock("rStore", {
   args: [],
   displayName: "rStore",
   callback: () => {
-    window.alert("Made by Robert Pirtea for rStore.");
+    window.alert("Made by ZXMushroom63 for rStore.");
   },
 });
 addBlock("Show HTML Box", {
@@ -1767,7 +1767,7 @@ menu.innerHTML = `
 </div>
 <div id="About" class="tabcontent">
   <h3>About</h3>
-  <p>ScratchKit v2 is a powerful mod menu for scratch inspired by the original ScratchKit. Both were developed by me, Robert Pirtea.</p><a href="https://github.com/ZXMushroom63/ScratchEditor">View Source</a>
+  <p>ScratchKit v2 is a powerful mod menu for scratch inspired by the original ScratchKit. Both were developed by me.</p><a href="https://github.com/ZXMushroom63/ScratchEditor">View Source</a>
 </div>
 `;
 
