@@ -43,7 +43,7 @@ function getSoundEditor() {
     }, 10);
   };
   document
-    .getElementById("react-tabs-10")
+    .getElementById("react-tabs-2")
     .addEventListener("click", hookSoundEditor);
 }
 function getBlockly() {
